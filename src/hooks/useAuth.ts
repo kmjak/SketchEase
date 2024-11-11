@@ -1,5 +1,6 @@
-import processLogin from "@/usecase/auth/processLogin";
-import processRegister from "@/usecase/auth/processRegister";
+import loginUseCase from "@/usecase/auth/loginUseCase";
+import registerUseCase from "@/usecase/auth/registerUseCase";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function useAuth() {
@@ -8,13 +9,13 @@ export default function useAuth() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     if (mode === "login") {
-      if(await processLogin(formData)){
-        alert("login success")
+      if(!await loginUseCase(formData)){
+        redirect("/home")
       }else{
         alert("login failed")
       }
     } else {
-      if(await processRegister(formData)){
+      if(await registerUseCase(formData)){
         alert("register success")
       }else{
         alert("register failed")
