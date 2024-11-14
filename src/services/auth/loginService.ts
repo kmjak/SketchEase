@@ -1,4 +1,5 @@
 import getUsers from "@/services/database/users/getUsers";
+import UserType from "@/types/interface/user/UserType";
 import findUser from "@/utils/findUser";
 
 interface loginServiceProps {
@@ -6,8 +7,8 @@ interface loginServiceProps {
   password: string;
 }
 
-export default async function loginService({name,password}:loginServiceProps):Promise<boolean> {
+export default async function loginService({name,password}:loginServiceProps):Promise<UserType | false> {
   const users = await getUsers();
   const user = await findUser({ users, name, password });
-  return user ? true : false;
+  return user;
 }
