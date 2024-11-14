@@ -3,10 +3,10 @@ import AuthForm from "./components/AuthForm";
 
 export default function Page() {
   return (
-    <main>
+    <div>
       <AuthForm
         cryptoConfig={cryptoConfig}
       />
-    </main>
+    </div>
   );
 }
