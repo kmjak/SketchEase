@@ -9,7 +9,7 @@ export default function useAuth() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     if (mode === "login") {
-      if(!await loginUseCase(formData)){
+      if(await loginUseCase(formData)){
         redirect("/home")
       }else{
         alert("login failed")
