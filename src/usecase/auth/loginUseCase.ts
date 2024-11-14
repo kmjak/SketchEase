@@ -1,6 +1,6 @@
 "use server"
 
-import { users_url } from "@/lib/url/users/users_url"
+import users_url from "@/lib/url/users/users_url"
 import loginService from "@/services/auth/loginService"
 
 export default async function loginUseCase(formData: FormData) {

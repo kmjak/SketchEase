@@ -1,4 +1,4 @@
-import { UserType } from "@/types/interface/user/UserType";
+import UserType from "@/types/interface/user/UserType";
 
 interface FindUserProps {
   name: string;

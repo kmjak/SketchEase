@@ -1,8 +1,8 @@
 "use server"
 
-import { users_url } from "@/lib/url/users/users_url"
+import users_url from "@/lib/url/users/users_url"
 import loginService from "@/services/auth/loginService";
-import { registerService } from "@/services/auth/registerService";
+import registerService from "@/services/auth/registerService";
 
 export default async function registerUseCase(formData: FormData):Promise<boolean> {
   const name = formData.get("name") as string
