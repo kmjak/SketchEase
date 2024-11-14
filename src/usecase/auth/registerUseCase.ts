@@ -3,17 +3,24 @@
 import users_url from "@/lib/url/users/users_url"
 import loginService from "@/services/auth/loginService";
 import registerService from "@/services/auth/registerService";
+import cryptoConfig from "@/lib/config/crypto/cryptoConfig";
+import decryptUseCase from "../crypto/decryptUseCase";
 
-export default async function registerUseCase(formData: FormData):Promise<boolean> {
-  const name = formData.get("name") as string
-  const password = formData.get("password") as string
-  if(!name || !password || !users_url) {
+interface RegisterUseCaseProps {
+  name: string;
+  password: string;
+}
+
+export default async function registerUseCase({name,password}:RegisterUseCaseProps):Promise<boolean> {
+  const plain_name = await decryptUseCase({cipher_text:name,key:cryptoConfig.auth_key})
+  const plain_password = await decryptUseCase({cipher_text:password,key:cryptoConfig.auth_key})
+  if(!plain_name || !plain_password || !users_url) {
     return false;
   }
-  if(await loginService({name,password,users_url})){
+  if(await loginService({name:plain_name,password:plain_password,users_url})){
     return false;
   }
-  if(await registerService({name,password,users_url})){
+  if(await registerService({name:plain_name,password:plain_password,users_url})){
     return true;
   }
   return false;
