@@ -2,6 +2,8 @@
 
 import useAuth from "@/hooks/useAuth";
 import CryptoConfigType from "@/types/config/crypto/cryptoConfig";
+import Input from "./Input";
+import AuthModeSwitch from "./AuthModeSwitch";
 
 interface AuthFormProps {
   cryptoConfig: CryptoConfigType;
@@ -17,26 +19,10 @@ export default function AuthForm({ cryptoConfig }: AuthFormProps) {
         </h1>
         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSubmit(e)} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              名前
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
+            <Input label="name" type="text" />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              パスワード
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            />
+            <Input label="password" type="password" />
             <div className="text-xs text-gray-500 mt-1">
               パスワードは8〜20文字で、以下の条件を満たす必要があります:
               <ul className="list-inside list-disc text-gray-500">
@@ -55,15 +41,7 @@ export default function AuthForm({ cryptoConfig }: AuthFormProps) {
           </button>
         </form>
         <div className="mt-6 text-center">
-          {mode === "login" ? (
-            <button onClick={() => setMode("register")} className="text-indigo-600 hover:underline">
-              アカウントをお持ちでないですか？ 登録
-            </button>
-          ) : (
-            <button onClick={() => setMode("login")} className="text-indigo-600 hover:underline">
-              既にアカウントをお持ちですか？ ログイン
-            </button>
-          )}
+          <AuthModeSwitch mode={mode} setMode={setMode} />
         </div>
       </div>
     </div>
