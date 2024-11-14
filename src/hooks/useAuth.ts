@@ -2,6 +2,7 @@ import CryptoConfigType from "@/types/config/crypto/cryptoConfig";
 import loginUseCase from "@/usecase/auth/loginUseCase";
 import registerUseCase from "@/usecase/auth/registerUseCase";
 import encryptUseCase from "@/usecase/crypto/encryptUseCase";
+import { validateName, validatePassword } from "@/utils/validate";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
@@ -16,20 +17,27 @@ export default function useAuth({cryptoConfig}:UseAuthProps) {
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string
     const password = formData.get("password") as string
+    if(validateName(name) === false){
+      alert("name is invalid")
+      return
+    }
+    if(validatePassword(password) === false){
+      alert("password is invalid")
+      return
+    }
     const cipher_name = await encryptUseCase({plain_text:name,key:cryptoConfig.auth_key})
     const cipher_password = await encryptUseCase({plain_text:password,key:cryptoConfig.auth_key})
     if (mode === "login") {
       if(await loginUseCase({name:cipher_name,password:cipher_password})){
         redirect("/home")
-      }else{
-        alert("login failed")
       }
+      alert("login failed")
     } else {
       if(await registerUseCase({name:cipher_name,password:cipher_password})){
         alert("register success")
-      }else{
-        alert("register failed")
+        return
       }
+      alert("register failed")
     }
   }
   return {

@@ -14,9 +14,6 @@ interface LoginUseCaseProps {
 export default async function loginUseCase({name,password}:LoginUseCaseProps):Promise<boolean> {
   const plain_name = await decryptUseCase({cipher_text:name,key:cryptoConfig.auth_key})
   const plain_password = await decryptUseCase({cipher_text:password,key:cryptoConfig.auth_key})
-  if(!plain_name || !plain_password) {
-    return false;
-  }
   const res = await loginService({name:plain_name,password:plain_password});
   if(res){
     const cipher_id = await encryptUseCase({plain_text:res.id.toString(),key:cryptoConfig.cookie_key});
