@@ -15,7 +15,7 @@ export default function Page() {
             New Project
           </button>
         </Link>
-        <Link href="project/mine">
+        <Link href="project/list">
           <button className="flex items-center justify-center px-8 py-4 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500">
             Projects
           </button>
