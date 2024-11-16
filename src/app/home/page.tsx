@@ -10,7 +10,7 @@ export default function Page() {
         Start a new project, explore past work, or see what others have created!
       </p>
       <div className="flex space-x-4">
-        <Link href="project/new">
+        <Link href="project/create">
           <button className="flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500">
             New Project
           </button>
