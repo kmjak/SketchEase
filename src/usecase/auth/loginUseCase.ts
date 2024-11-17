@@ -18,7 +18,7 @@ export default async function loginUseCase({name,password}:LoginUseCaseProps):Pr
   if(res){
     const plain_id = await decryptUseCase({cipher_text:res.id,key:cryptoConfig.db_key});
     const cipher_id = await encryptUseCase({plain_text:plain_id,key:cryptoConfig.cookie_key});
-    await setCookieUseCase({name:"id", value:cipher_id,expires:new Date(Date.now() + 60*60)});
+    await setCookieUseCase({name:"id", value:cipher_id, maxAge:60*60});
     return true;
   }
   return false;
