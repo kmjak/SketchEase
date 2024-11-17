@@ -35,7 +35,7 @@ export default function useAuth() {
       alert("register failed")
     }
   }
-  const fetchUserId = async () => {
+  const getUserId = async () => {
     const cipher_id = await getCookieUseCase({name:"id"});
     if(cipher_id){
       const plain_id = await decryptUseCase({cipher_text:cipher_id,mode:"cookie"})
@@ -48,6 +48,6 @@ export default function useAuth() {
     id,
     setId,
     handleSubmit,
-    fetchUserId,
+    getUserId,
   }
 }
