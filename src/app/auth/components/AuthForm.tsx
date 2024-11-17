@@ -1,16 +1,11 @@
 "use client"
 
 import useAuth from "@/hooks/auth/useAuth";
-import CryptoConfigType from "@/types/config/crypto/cryptoConfig";
 import Input from "./Input";
 import AuthModeSwitch from "./AuthModeSwitch";
 
-interface AuthFormProps {
-  cryptoConfig: CryptoConfigType;
-}
-
-export default function AuthForm({ cryptoConfig }: AuthFormProps) {
-  const { handleSubmit, mode, setMode } = useAuth({ cryptoConfig });
+export default function AuthForm() {
+  const { handleSubmit, mode, setMode } = useAuth();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-6">
       <div className="w-full max-w-md p-8 shadow-lg rounded-lg">

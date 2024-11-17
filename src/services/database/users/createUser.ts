@@ -1,16 +1,15 @@
 "use server"
 
 import users_url from "@/lib/url/users/users_url"
-import cryptoConfig from "@/lib/config/crypto/cryptoConfig";
 import encryptUseCase from "@/usecase/crypto/encryptUseCase";
 import UserType from "@/types/interface/user/UserType";
 
 
 
 export default async function createUser({ id, name, password }:UserType):Promise<boolean>{
-  const cipher_id = await encryptUseCase({plain_text:id,key:cryptoConfig.db_key})
-  const cipher_name = await encryptUseCase({plain_text:name,key:cryptoConfig.db_key})
-  const cipher_password = await encryptUseCase({plain_text:password,key:cryptoConfig.db_key})
+  const cipher_id = await encryptUseCase({plain_text:id,mode:"db"})
+  const cipher_name = await encryptUseCase({plain_text:name,mode:"db"})
+  const cipher_password = await encryptUseCase({plain_text:password,mode:"db"})
   const res = await fetch(users_url!, {
     method: "POST",
     body: JSON.stringify({ id:cipher_id, name:cipher_name, password:cipher_password }),
