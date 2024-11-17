@@ -17,12 +17,8 @@ export default function useAuth({cryptoConfig}:UseAuthProps) {
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string
     const password = formData.get("password") as string
-    if(validateName(name) === false){
-      alert("name is invalid")
-      return
-    }
-    if(validatePassword(password) === false){
-      alert("password is invalid")
+    if(validateName(name) === false || validatePassword(password) === false){
+      alert("invalid name or password")
       return
     }
     const cipher_name = await encryptUseCase({plain_text:name,key:cryptoConfig.auth_key})
@@ -43,6 +39,6 @@ export default function useAuth({cryptoConfig}:UseAuthProps) {
   return {
     mode,
     setMode,
-    handleSubmit
+    handleSubmit,
   }
 }
