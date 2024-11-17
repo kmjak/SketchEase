@@ -3,15 +3,15 @@ import { cookies } from "next/headers";
 interface SetCookieUseCaseProps {
   name: string;
   value: string;
-  expires: Date;
+  maxAge: number;
 }
 
-export default async function setCookieUseCase({ name, value, expires }: SetCookieUseCaseProps) {
+export default async function setCookieUseCase({ name, value, maxAge }: SetCookieUseCaseProps) {
   const cookie_store = await cookies();
   cookie_store.set({
     name,
     value,
-    expires,
+    maxAge,
     path: "/",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
