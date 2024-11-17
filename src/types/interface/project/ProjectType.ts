@@ -3,6 +3,6 @@ interface ProjectType {
   ownerId: string
   projectName: string
   canvasSize: number
-  canvasData:[[string]]
+  canvasData: string[][]
 }
 export default ProjectType
