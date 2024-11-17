@@ -1,6 +1,6 @@
 "use client"
 
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/hooks/auth/useAuth";
 import CryptoConfigType from "@/types/config/crypto/cryptoConfig";
 import Input from "./Input";
 import AuthModeSwitch from "./AuthModeSwitch";
