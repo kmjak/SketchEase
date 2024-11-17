@@ -1,7 +1,16 @@
 "use client"
+import { useEffect } from "react";
 import CreateProject from "../FormAction/CreateAction";
+import useAuth from "@/hooks/auth/useAuth";
 
 export default function ProjectForm() {
+  const { id, getUserId } = useAuth();
+  useEffect(() => {
+    const fetchUserId = async () => {
+      await getUserId()
+    }
+    fetchUserId()
+  }, [])
   return (
     <form className="flex flex-col gap-4 items-start space-y-4" action={CreateProject}>
     <div className="">
@@ -28,6 +37,7 @@ export default function ProjectForm() {
         className="border border-gray-300 rounded-lg p-2 w-full max-w-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
       />
     </div>
+    <input type="hidden" name="ownerId" value={id} />
     <button
       type="submit"
       className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
