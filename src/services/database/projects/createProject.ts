@@ -7,7 +7,7 @@ export default async function createProject({ id, ownerId, projectName, canvasSi
   const canvasDataString = JSON.stringify(canvasData)
   const res = await fetch(project_url!, {
     method: "POST",
-    body: JSON.stringify({ id, ownerId, projectName, canvasSize, canvasDataString }),
+    body: JSON.stringify({ id, ownerId, projectName, canvasSize, canvasData:canvasDataString }),
     headers: {
       "Content-Type": "application/json",
     },
