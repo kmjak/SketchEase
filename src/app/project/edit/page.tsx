@@ -2,12 +2,13 @@
 
 import useCookie from "@/hooks/cookie/useCookie";
 import useProject from "@/hooks/project/useProject";
+import updateProject from "@/services/database/projects/updateProject";
 import decryptUseCase from "@/usecase/crypto/decryptUseCase";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [mode, setMode] = useState<"pen" | "eraser" | "bucket">("pen");
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(false);
   const { getCookie } = useCookie();
   const { setProjectId, getProject, project, projectId } = useProject();
@@ -49,7 +50,7 @@ export default function Page() {
       project!.canvasData[row][col] = color;
     }
     if (mode === "eraser") {
-      project!.canvasData[row][col] = "";
+      project!.canvasData[row][col] = '';
     }
     if (mode === "bucket") {
       const start_color = project!.canvasData[row][col];
@@ -77,9 +78,24 @@ export default function Page() {
       project!.canvasData[row][col] = color;
     }
     if (isDrawing && mode === "eraser") {
-      project!.canvasData[row][col] = "";
+      project!.canvasData[row][col] = '';
     }
   };
+
+  const handleSave = async () => {
+    const res = await updateProject({
+      id: project!.id,
+      ownerId: project!.ownerId,
+      projectName: project!.projectName,
+      canvasSize: project!.canvasSize,
+      canvasData: project!.canvasData,
+    });
+    if (res) {
+      alert("保存しました");
+    } else {
+      alert("保存に失敗しました");
+    }
+  }
 
   return (
     <main
@@ -137,7 +153,10 @@ export default function Page() {
         </div>
 
         <div className="flex space-x-4">
-          <button className="flex-grow bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
+          <button
+            className="flex-grow bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
+            onClick={handleSave}
+          >
             保存
           </button>
           <button className="flex-grow bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors">
