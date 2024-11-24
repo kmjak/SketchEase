@@ -4,10 +4,10 @@ import { useState } from "react";
 
 export default function useProject (){
   const [projectId,setProjectId] = useState<string>('')
-  const [project, setProject] = useState<ProjectType | null>(null);
+  const [ownerId,setOwnerId] = useState<string>('')
+  const [project, setProject] = useState<ProjectType | null | undefined>(undefined);
   const getProject = async () => {
-    const res = await getProjectUseCase({projectId})
-    console.log(res)
+    const res = await getProjectUseCase({projectId, ownerId})
     setProject(res)
   }
   return {
@@ -15,6 +15,7 @@ export default function useProject (){
     project,
     setProject,
     projectId,
-    setProjectId
+    setProjectId,
+    setOwnerId,
   }
 }

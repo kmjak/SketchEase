@@ -6,6 +6,7 @@ import updateProject from "@/services/database/projects/updateProject";
 import decryptUseCase from "@/usecase/crypto/decryptUseCase";
 import { useEffect, useState } from "react";
 import ExitModal from "./components/ExitModal";
+import { redirect } from "next/navigation";
 
 export default function Page() {
   const [mode, setMode] = useState<"pen" | "eraser" | "bucket" | "spuit">("pen");
@@ -13,18 +14,16 @@ export default function Page() {
   const [ModalState, setModalState] = useState<boolean>(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const { getCookie,setCookie } = useCookie();
-  const { setProjectId, getProject, project, projectId } = useProject();
+  const { setProjectId, getProject, project, projectId, setOwnerId } = useProject();
 
   useEffect(() => {
     const fetchData = async () => {
       const cipher_userId = await getCookie("id");
       const cipher_projectId = await getCookie("projectId");
-      if (cipher_projectId === null || cipher_userId === null) return;
-      const plain_projectId = await decryptUseCase({
-        cipher_text: cipher_projectId!,
-        mode: "cookie",
-      });
+      const plain_projectId = await decryptUseCase({cipher_text: cipher_projectId!, mode: "cookie"});
+      const plain_userId = await decryptUseCase({cipher_text: cipher_userId!, mode: "cookie"});
       setProjectId(plain_projectId);
+      setOwnerId(plain_userId);
     };
     fetchData();
   }, []);
@@ -36,6 +35,14 @@ export default function Page() {
     };
     fetchData();
   }, [projectId]);
+
+  useEffect(() => {
+    if (project === null) {
+      alert("プロジェクトが存在しないか、権限がありません");
+      setCookie("projectId", "", 0);
+      redirect("/home");
+    }
+  }, [project]);
 
   const isRange = (row: number, col: number) => {
     return (
