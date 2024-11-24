@@ -7,7 +7,7 @@ import decryptUseCase from "@/usecase/crypto/decryptUseCase";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [mode, setMode] = useState<"pen" | "eraser" | "bucket">("pen");
+  const [mode, setMode] = useState<"pen" | "eraser" | "bucket" | "spuit">("pen");
   const [color, setColor] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(false);
   const { getCookie } = useCookie();
@@ -69,6 +69,10 @@ export default function Page() {
           [x, y-1]
         );
       }
+    }
+    if(mode === "spuit") {
+      const set_color = project!.canvasData[row][col];
+      setColor(set_color);
     }
   };
   const handleMouseUp = () => setIsDrawing(false);
@@ -148,6 +152,12 @@ export default function Page() {
               onClick={() => setMode("bucket")}
             >
               🪣
+            </button>
+            <button
+              className={`h-12 w-12 rounded-full transition-all ${mode === "spuit" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
+              onClick={() => setMode("spuit")}
+            >
+              💉
             </button>
           </div>
         </div>
