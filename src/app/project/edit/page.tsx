@@ -5,10 +5,12 @@ import useProject from "@/hooks/project/useProject";
 import updateProject from "@/services/database/projects/updateProject";
 import decryptUseCase from "@/usecase/crypto/decryptUseCase";
 import { useEffect, useState } from "react";
+import ExitModal from "./components/ExitModal";
 
 export default function Page() {
   const [mode, setMode] = useState<"pen" | "eraser" | "bucket" | "spuit">("pen");
   const [color, setColor] = useState('#000000');
+  const [ModalState, setModalState] = useState<boolean>(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const { getCookie } = useCookie();
   const { setProjectId, getProject, project, projectId } = useProject();
@@ -101,79 +103,93 @@ export default function Page() {
     }
   }
 
-  return (
-    <main
-      className="flex flex-col items-start space-y-4 justify-end"
-      onMouseUp={handleMouseUp}
-    >
-      {project?.canvasData && (
-        <div className="p-4 bg-blue-500">
-          <div className="w-full h-full">
-            {project.canvasData.map((row: string[], rowIndex: number) => (
-              <div key={rowIndex} className="flex">
-                {row.map((cell: string, cellIndex: number) => (
-                  <div
-                    key={`${rowIndex}-${cellIndex}`}
-                    className="w-10 h-10 border border-neutral-300 bg-gray-100 text-sm"
-                    style={{ backgroundColor: cell }}
-                    onMouseDown={() => handleMouseDown(rowIndex, cellIndex)}
-                    onMouseEnter={() => handleMouseEnter(rowIndex, cellIndex)}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      <div className="w-80 bg-white shadow-xl p-6 flex flex-col justify-between fixed right-0 top-0 mx-5">
-        <div>
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Canvas Tools</h2>
-          <div className="flex space-x-4 mb-6">
-            <button
-              className={`h-12 w-12 rounded-full transition-all ${mode === "pen" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
-              onClick={() => setMode("pen")}
-            >
-              🖋️
-            </button>
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="w-12 h-12 p-1 rounded-full border-2 border-neutral-300"
-            />
-            <button
-              className={`h-12 w-12 rounded-full transition-all ${mode === "eraser" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
-              onClick={() => setMode("eraser")}
-            >
-              🧽
-            </button>
-            <button
-              className={`h-12 w-12 rounded-full transition-all ${mode === "bucket" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
-              onClick={() => setMode("bucket")}
-            >
-              🪣
-            </button>
-            <button
-              className={`h-12 w-12 rounded-full transition-all ${mode === "spuit" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
-              onClick={() => setMode("spuit")}
-            >
-              💉
-            </button>
-          </div>
-        </div>
+  const handleExit = async () => {
+    setModalState(true);
+  }
 
-        <div className="flex space-x-4">
-          <button
-            className="flex-grow bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
-            onClick={handleSave}
-          >
-            保存
-          </button>
-          <button className="flex-grow bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors">
-            終了
-          </button>
+  return (
+    <main>
+      <section
+        className="flex flex-col items-start space-y-4 justify-end"
+        onMouseUp={handleMouseUp}
+      >
+        {project?.canvasData && (
+          <div className="p-4 bg-blue-500">
+            <div className="w-full h-full">
+              {project.canvasData.map((row: string[], rowIndex: number) => (
+                <div key={rowIndex} className="flex">
+                  {row.map((cell: string, cellIndex: number) => (
+                    <div
+                      key={`${rowIndex}-${cellIndex}`}
+                      className="w-10 h-10 border border-neutral-300 bg-gray-100 text-sm"
+                      style={{ backgroundColor: cell }}
+                      onMouseDown={() => handleMouseDown(rowIndex, cellIndex)}
+                      onMouseEnter={() => handleMouseEnter(rowIndex, cellIndex)}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        <div className="w-80 bg-white shadow-xl p-6 flex flex-col justify-between fixed right-0 top-0 mx-5">
+          <div>
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">Canvas Tools</h2>
+            <div className="flex space-x-4 mb-6">
+              <button
+                className={`h-12 w-12 rounded-full transition-all ${mode === "pen" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
+                onClick={() => setMode("pen")}
+              >
+                🖋️
+              </button>
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-12 h-12 p-1 rounded-full border-2 border-neutral-300"
+              />
+              <button
+                className={`h-12 w-12 rounded-full transition-all ${mode === "eraser" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
+                onClick={() => setMode("eraser")}
+              >
+                🧽
+              </button>
+              <button
+                className={`h-12 w-12 rounded-full transition-all ${mode === "bucket" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
+                onClick={() => setMode("bucket")}
+              >
+                🪣
+              </button>
+              <button
+                className={`h-12 w-12 rounded-full transition-all ${mode === "spuit" ? "bg-blue-500 text-white" : "bg-neutral-200 text-gray-700"}`}
+                onClick={() => setMode("spuit")}
+              >
+                💉
+              </button>
+            </div>
+          </div>
+          <div className="flex space-x-4">
+            <button
+              className="flex-grow bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
+              onClick={handleSave}
+            >
+              保存
+            </button>
+            <button
+              className="flex-grow bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
+              onClick={handleExit}
+            >
+              終了
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
+      {ModalState && (
+        <ExitModal
+          save={handleSave}
+          setModalState={setModalState}
+        />
+      )}
     </main>
   );
 }
