@@ -1,21 +1,27 @@
 import { redirect } from "next/navigation";
 
 interface ExitModalProps {
-  save: () => void;
+  save:() => void;
   setModalState: (state: false) => void;
   setCookie: (name:string, value:string, maxAge:number) => void;
 }
 
 export default function ExitModal({save, setModalState, setCookie}:ExitModalProps) {
   const handleExitWithoutSave = async () => {
-    await setCookie("projectId", "", 0);
-    redirect("/home");
+    if(confirm("保存せずに終了しますか？")){
+      await setCookie("projectId", "", 0);
+      redirect("/home");
+    }
+    setModalState(false)
   }
 
   const handleExitWithSave = async () => {
-    await save()
-    await setCookie("projectId", "", 0);
-    redirect("/home");
+    if(confirm("保存して終了しますか？")){
+      await save();
+      await setCookie("projectId", "", 0);
+      redirect("/home");
+    }
+    setModalState(false)
   }
   return (
     <>
