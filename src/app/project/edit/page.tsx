@@ -12,7 +12,7 @@ export default function Page() {
   const [color, setColor] = useState('#000000');
   const [ModalState, setModalState] = useState<boolean>(false);
   const [isDrawing, setIsDrawing] = useState(false);
-  const { getCookie } = useCookie();
+  const { getCookie,setCookie } = useCookie();
   const { setProjectId, getProject, project, projectId } = useProject();
 
   useEffect(() => {
@@ -188,6 +188,7 @@ export default function Page() {
         <ExitModal
           save={handleSave}
           setModalState={setModalState}
+          setCookie={setCookie}
         />
       )}
     </main>

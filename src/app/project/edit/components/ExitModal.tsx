@@ -3,11 +3,18 @@ import { redirect } from "next/navigation";
 interface ExitModalProps {
   save: () => void;
   setModalState: (state: false) => void;
+  setCookie: (name:string, value:string, maxAge:number) => void;
 }
 
-export default function ExitModal({save, setModalState}:ExitModalProps) {
+export default function ExitModal({save, setModalState, setCookie}:ExitModalProps) {
+  const handleExitWithoutSave = async () => {
+    await setCookie("projectId", "", 0);
+    redirect("/home");
+  }
+
   const handleExitWithSave = async () => {
     await save()
+    await setCookie("projectId", "", 0);
     redirect("/home");
   }
   return (
@@ -24,7 +31,7 @@ export default function ExitModal({save, setModalState}:ExitModalProps) {
           </button>
           <button
             className="flex-grow bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
-            onClick={() => redirect("/home")}
+            onClick={handleExitWithoutSave}
           >
             保存せずに終了
           </button>
