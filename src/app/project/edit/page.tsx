@@ -4,6 +4,7 @@ import useCookie from "@/hooks/cookie/useCookie";
 import useProject from "@/hooks/project/useProject";
 import { useState } from "react";
 import ExitModal from "./components/ExitModal";
+import ActionButtons from "./components/ActionButtons";
 
 export default function Page() {
   const [ModalState, setModalState] = useState<boolean>(false);
@@ -75,20 +76,10 @@ export default function Page() {
               </button>
             </div>
           </div>
-          <div className="flex space-x-4">
-            <button
-              className="flex-grow bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors"
-              onClick={handleSave}
-            >
-              保存
-            </button>
-            <button
-              className="flex-grow bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors"
-              onClick={handleExit}
-            >
-              終了
-            </button>
-          </div>
+          <ActionButtons
+            handleSave={handleSave}
+            handleExit={handleExit}
+          />
         </div>
       </section>
       {ModalState && (
