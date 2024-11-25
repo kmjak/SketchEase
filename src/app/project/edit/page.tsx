@@ -5,6 +5,7 @@ import useProject from "@/hooks/project/useProject";
 import { useState } from "react";
 import ExitModal from "./components/ExitModal";
 import ActionButtons from "./components/ActionButtons";
+import ShowCanvas from "./components/ShowCanvas";
 
 export default function Page() {
   const [ModalState, setModalState] = useState<boolean>(false);
@@ -21,25 +22,11 @@ export default function Page() {
         className="flex flex-col items-start space-y-4 justify-end"
         onMouseUp={handleMouseUp}
       >
-        {project?.canvasData && (
-          <div className="p-4 bg-blue-500">
-            <div className="w-full h-full">
-              {project.canvasData.map((row: string[], rowIndex: number) => (
-                <div key={rowIndex} className="flex">
-                  {row.map((cell: string, cellIndex: number) => (
-                    <div
-                      key={`${rowIndex}-${cellIndex}`}
-                      className="w-10 h-10 border border-neutral-300 bg-gray-100 text-sm"
-                      style={{ backgroundColor: cell }}
-                      onMouseDown={() => handleMouseDown(rowIndex, cellIndex)}
-                      onMouseEnter={() => handleMouseEnter(rowIndex, cellIndex)}
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <ShowCanvas
+          project={project!}
+          handleMouseDown={handleMouseDown}
+          handleMouseEnter={handleMouseEnter}
+        />
         <div className="w-80 bg-white shadow-xl p-6 flex flex-col justify-between fixed right-0 top-0 mx-5">
           <div>
             <h2 className="text-2xl font-bold mb-6 text-gray-800">Canvas Tools</h2>
