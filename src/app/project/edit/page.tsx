@@ -2,113 +2,13 @@
 
 import useCookie from "@/hooks/cookie/useCookie";
 import useProject from "@/hooks/project/useProject";
-import updateProject from "@/services/database/projects/updateProject";
-import decryptUseCase from "@/usecase/crypto/decryptUseCase";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ExitModal from "./components/ExitModal";
-import { redirect } from "next/navigation";
 
 export default function Page() {
-  const [mode, setMode] = useState<"pen" | "eraser" | "bucket" | "spuit">("pen");
-  const [color, setColor] = useState('#000000');
   const [ModalState, setModalState] = useState<boolean>(false);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const { getCookie,setCookie } = useCookie();
-  const { setProjectId, getProject, project, projectId, setOwnerId } = useProject();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cipher_userId = await getCookie("id");
-      const cipher_projectId = await getCookie("projectId");
-      const plain_projectId = await decryptUseCase({cipher_text: cipher_projectId!, mode: "cookie"});
-      const plain_userId = await decryptUseCase({cipher_text: cipher_userId!, mode: "cookie"});
-      setProjectId(plain_projectId);
-      setOwnerId(plain_userId);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (projectId === "") return;
-      getProject();
-    };
-    fetchData();
-  }, [projectId]);
-
-  useEffect(() => {
-    if (project === null) {
-      alert("プロジェクトが存在しないか、権限がありません");
-      setCookie("projectId", "", 0);
-      redirect("/home");
-    }
-  }, [project]);
-
-  const isRange = (row: number, col: number) => {
-    return (
-      row >= 0 &&
-      row < project!.canvasData.length &&
-      col >= 0 &&
-      col < project!.canvasData[0].length
-    );
-  }
-
-  const handleMouseDown = (row: number, col: number) => {
-    setIsDrawing(true);
-    if (mode === "pen") {
-      project!.canvasData[row][col] = color;
-    }
-    if (mode === "eraser") {
-      project!.canvasData[row][col] = '';
-    }
-    if (mode === "bucket") {
-      const start_color = project!.canvasData[row][col];
-      const queue: [number, number][] = [[row, col]];
-      const visited: boolean[][] = project!.canvasData.map(row => row.map(() => false));
-      while (queue.length > 0) {
-        const [x, y] = queue.shift()!;
-        if (!isRange(x, y) || visited[x][y]) continue;
-        if (project!.canvasData[x][y] !== start_color) continue;
-        project!.canvasData[x][y] = color;
-        visited[x][y] = true;
-        queue.push(
-          [x+1, y],
-          [x-1, y],
-          [x, y+1],
-          [x, y-1]
-        );
-      }
-    }
-    if(mode === "spuit") {
-      const set_color = project!.canvasData[row][col];
-      setColor(set_color);
-    }
-  };
-  const handleMouseUp = () => setIsDrawing(false);
-
-  const handleMouseEnter = async (row: number, col: number) => {
-    if (isDrawing && mode === "pen") {
-      project!.canvasData[row][col] = color;
-    }
-    if (isDrawing && mode === "eraser") {
-      project!.canvasData[row][col] = '';
-    }
-  };
-
-  const handleSave = async () => {
-    const res = await updateProject({
-      id: project!.id,
-      ownerId: project!.ownerId,
-      projectName: project!.projectName,
-      canvasSize: project!.canvasSize,
-      canvasData: project!.canvasData,
-    });
-    if (res) {
-      alert("保存しました");
-    } else {
-      alert("保存に失敗しました");
-    }
-  }
+  const { setCookie } = useCookie();
+  const { project, handleSave, color, setColor, handleMouseUp, mode, setMode, handleMouseDown, handleMouseEnter } = useProject();
 
   const handleExit = async () => {
     setModalState(true);
