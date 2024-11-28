@@ -52,52 +52,55 @@ export default function useProject (){
 
   const handleMouseDown = (row: number, col: number) => {
     setIsDrawing(true);
+    const DX = [0, 1, 0, -1];
+    const DY = [1, 0, -1, 0];
     if (mode === "pen") {
+      console.log(`row : ${row} col : ${col}`); 
       project!.canvasData[row][col] = color;
     }
     if (mode === "eraser") {
       project!.canvasData[row][col] = '';
+    }
+    if (mode === "bucket") {
+      const start_color = project!.canvasData[row][col];
+      console.log(`row : ${row} col : ${col}`);
+      project!.canvasData[row][col] = color;
+      const queue: [number, number][] = [[row, col]];
+      while (queue.length > 0) {
+        const [y,x] = queue.shift()!;
+        for(let i = 0; i < 4; i++){
+          const nx = x + DX[i];
+          const ny = y + DY[i];
+          if(isRange(nx,ny) && project!.canvasData[ny][nx] === start_color){
+            project!.canvasData[ny][nx] = color;
+            queue.push([ny,nx]);
+          }
+        }
+      }
+    }
+    if(mode === "spuit") {
+      const set_color = project!.canvasData[row][col];
+      setColor(set_color);
     }
   };
 
   const isRange = (row: number, col: number) => {
     return (
       row >= 0 &&
-      row < project!.canvasData.length &&
+      row < project!.canvasSize &&
       col >= 0 &&
-      col < project!.canvasData[0].length
+      col < project!.canvasSize
     );
   }
 
 
   const handleMouseEnter = async (row: number, col: number) => {
+
     if (isDrawing && mode === "pen") {
       project!.canvasData[row][col] = color;
     }
     if (isDrawing && mode === "eraser") {
       project!.canvasData[row][col] = '';
-    }
-    if (mode === "bucket") {
-      const start_color = project!.canvasData[row][col];
-      const queue: [number, number][] = [[row, col]];
-      const visited: boolean[][] = project!.canvasData.map(row => row.map(() => false));
-      while (queue.length > 0) {
-        const [x, y] = queue.shift()!;
-        if (!isRange(x, y) || visited[x][y]) continue;
-        if (project!.canvasData[x][y] !== start_color) continue;
-        project!.canvasData[x][y] = color;
-        visited[x][y] = true;
-        queue.push(
-          [x+1, y],
-          [x-1, y],
-          [x, y+1],
-          [x, y-1]
-        );
-      }
-    }
-    if(mode === "spuit") {
-      const set_color = project!.canvasData[row][col];
-      setColor(set_color);
     }
   };
 
