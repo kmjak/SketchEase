@@ -25,7 +25,7 @@ export default function ExitModal({save, setModalState, setCookie}:ExitModalProp
   }
   return (
     <>
-      <div className="h-screen w-screen bg-black opacity-35 fixed inset-0" />
+      <div className="h-screen w-screen bg-black opacity-35 fixed inset-0" onClick={() => setModalState(false)}/>
       <div className="bg-white w-96 p-6 rounded-xl shadow-xl fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">保存して終了しますか？</h2>
         <div className="flex space-x-4">
