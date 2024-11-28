@@ -55,7 +55,6 @@ export default function useProject (){
     const DX = [0, 1, 0, -1];
     const DY = [1, 0, -1, 0];
     if (mode === "pen") {
-      console.log(`row : ${row} col : ${col}`); 
       project!.canvasData[row][col] = color;
     }
     if (mode === "eraser") {
@@ -63,7 +62,6 @@ export default function useProject (){
     }
     if (mode === "bucket") {
       const start_color = project!.canvasData[row][col];
-      console.log(`row : ${row} col : ${col}`);
       project!.canvasData[row][col] = color;
       const queue: [number, number][] = [[row, col]];
       while (queue.length > 0) {
