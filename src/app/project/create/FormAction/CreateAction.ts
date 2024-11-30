@@ -7,8 +7,8 @@ import { redirect } from "next/navigation"
 import { v4 as uuid4 } from "uuid"
 
 export default async function CreateProject(formData: FormData) {
-  const projectName = formData.get("projectName") as string
-  const canvasSize = parseInt(formData.get("canvasSize") as string)
+  const projectName = formData.get("projectName") as string || "new project" as string
+  const canvasSize = parseInt(formData.get("canvasSize") as string) || 10
   const ownerId = formData.get("ownerId") as string
   const canvasData = Array.from({ length: canvasSize }, () =>
     Array.from({ length: canvasSize }, () => "")

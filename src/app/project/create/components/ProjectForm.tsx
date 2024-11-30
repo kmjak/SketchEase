@@ -20,10 +20,10 @@ export default function ProjectForm() {
         type="text"
         id="project-name"
         name="projectName"
-        placeholder="Enter name"
+        placeholder="New Project"
         className="border border-gray-300 rounded-lg p-2 w-full max-w-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
       />
-    </div>
+      </div>
     <div className="">
       <label htmlFor="canvas-size" className="text-lg font-medium">
         Size (1-1000):
@@ -34,9 +34,10 @@ export default function ProjectForm() {
         name="canvasSize"
         min="1"
         max="1000"
-        placeholder="Enter size"
+        placeholder="8"
         className="border border-gray-300 rounded-lg p-2 w-full max-w-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
       />
+      <small className="text-sm">※ デフォルトは8です</small>
     </div>
     <input type="hidden" name="ownerId" value={id} />
     <div className="flex gap-8 w-full">
