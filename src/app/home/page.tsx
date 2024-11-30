@@ -20,11 +20,6 @@ export default function Page() {
             Projects
           </button>
         </Link>
-        <Link href="project/others">
-          <button className="flex items-center justify-center px-8 py-4 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500">
-            Others
-          </button>
-        </Link>
       </div>
     </div>
   );
