@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import CreateProject from "../FormAction/CreateAction";
 import useAuth from "@/hooks/auth/useAuth";
+import Link from "next/link";
 
 export default function ProjectForm() {
   const { id, getUserId } = useAuth();
@@ -38,12 +39,20 @@ export default function ProjectForm() {
       />
     </div>
     <input type="hidden" name="ownerId" value={id} />
-    <button
-      type="submit"
-      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-    >
-      Create
-    </button>
+    <div className="flex gap-8 w-full">
+      <Link
+        href="/home"
+        className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400"
+      >
+        Cancel
+      </Link>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+      >
+        Create
+      </button>
+    </div>
   </form>
   )
 }
